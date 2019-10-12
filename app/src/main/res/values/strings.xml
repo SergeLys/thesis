@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Thesis</string>
+    <string name="btn_load">load</string>
+    <string name="btn_clear">clear</string>
+    <string name="picasso_label">Picasso</string>
+    <string name="glide_label">Glide</string>
 </resources>
