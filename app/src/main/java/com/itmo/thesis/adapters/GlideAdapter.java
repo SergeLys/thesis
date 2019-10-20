@@ -2,6 +2,7 @@ package com.itmo.thesis.adapters;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.TimingLogger;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +17,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.itmo.thesis.Image;
 import com.itmo.thesis.R;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class GlideAdapter extends RecyclerView.Adapter<GlideAdapter.ViewHolder>{
 
+    private TimingLogger timing;
     private LayoutInflater inflater;
     private List<Image> images;
 
     public GlideAdapter(Context context, List<Image> images) {
+        this.timing = new TimingLogger("load","Glide");
         this.inflater = LayoutInflater.from(context);
         this.images = images;
     }
@@ -47,10 +48,19 @@ public class GlideAdapter extends RecyclerView.Adapter<GlideAdapter.ViewHolder>{
         holder.load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                long startTime = System.currentTimeMillis();
+                timing.addSplit("start load");
                 Glide.with(view.getContext())
                         .load(Uri.parse(image.getUrl()))
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
                         .into(holder.imageView);
+                timing.addSplit("finish load");
+                timing.dumpToLog();
+                timing.reset();
+                long stopTime = System.currentTimeMillis();
+                long elapsedTime = stopTime - startTime;
+                holder.speedView.setText(elapsedTime + " ms");
             }
         });
         holder.clear.setOnClickListener(new View.OnClickListener() {

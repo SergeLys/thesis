@@ -2,6 +2,7 @@ package com.itmo.thesis.adapters;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.TimingLogger;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.itmo.thesis.Image;
 import com.itmo.thesis.R;
@@ -21,10 +23,13 @@ import java.util.List;
 
 public class PicassoAdapter extends RecyclerView.Adapter<PicassoAdapter.ViewHolder>{
 
+    //adb shell setprop log.tag.load VERBOSE
+    private TimingLogger timing;
     private LayoutInflater inflater;
     private List<Image> images;
 
     public PicassoAdapter(Context context, List<Image> images) {
+        this.timing = new TimingLogger("load","Picasso");
         this.inflater = LayoutInflater.from(context);
         this.images = images;
     }
@@ -45,10 +50,19 @@ public class PicassoAdapter extends RecyclerView.Adapter<PicassoAdapter.ViewHold
         holder.load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                long startTime = System.currentTimeMillis();
+                timing.addSplit("start load");
                 Picasso.get()
                         .load(Uri.parse(image.getUrl()))
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                         .into(holder.imageView);
+                timing.addSplit("finish load");
+                timing.dumpToLog();
+                timing.reset();
+                long stopTime = System.currentTimeMillis();
+                long elapsedTime = stopTime - startTime;
+                holder.speedView.setText(elapsedTime + " ms");
             }
         });
         holder.clear.setOnClickListener(new View.OnClickListener() {
