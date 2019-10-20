@@ -1,56 +1,51 @@
 package com.itmo.thesis;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.squareup.picasso.Picasso;
+import android.widget.Button;
+import android.widget.CheckBox;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Uri url = Uri.parse("https://memepedia.ru/wp-content/uploads/2019/06/ozadachennyy-kot-sidit-za-stolom-6.jpg");
-    private ImageView picassoImg, glideImg;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        picassoImg = findViewById(R.id.picasso_img);
-        glideImg = findViewById(R.id.glide_img);
+        intent = new Intent(getBaseContext(), RecyclerViewActivity.class);
+        intent.putExtra("format", Format.PNG);
     }
 
-    public void loadImages(final View view) {
-        new Thread(new Runnable() {
-            public void run() {
-                Glide.with(view.getContext())
-                        .asBitmap()
-                        .load(url)
-                        .into(new BitmapImageViewTarget(glideImg) {
-                            @Override
-                            protected void setResource(Bitmap resource) {
-                                //Play with bitmap
-                                super.setResource(resource);
-                            }
-                        });
-            }
-        }).start();
-        runOnUiThread(new Runnable() {
-            public void run() {
-                Picasso.get().
-                        load(url)
-                        .into(picassoImg);
-            }
-        });
+    public void onLibBtnClick(View view) {
+        Button lib = (Button) view;
+        switch (lib.getId()) {
+            case R.id.btn_glide:
+                intent.putExtra("lib", Type.GLIDE);
+                break;
+            case R.id.btn_picasso:
+                intent.putExtra("lib", Type.PICASSO);
+                break;
+        }
+        startActivity(intent);
     }
 
-    public void clearImages(View view) {
-        picassoImg.setImageResource(0);
-        glideImg.setImageResource(0);
+    public void onCheckBoxSelect(View view) {
+        CheckBox format = (CheckBox) view;
+        if (format.isChecked()) {
+            switch (format.getId()) {
+                case R.id.checkBoxJpeg:
+                    intent.putExtra("format", Format.JPEG);
+                    break;
+                case R.id.checkBoxPng:
+                    intent.putExtra("format", Format.PNG);
+                    break;
+            }
+        }
     }
 }

@@ -4,4 +4,12 @@
     <string name="btn_clear">clear</string>
     <string name="picasso_label">Picasso</string>
     <string name="glide_label">Glide</string>
+    <string name="glide_btn">Glide</string>
+    <string name="btn_glide">Glide</string>
+    <string name="btn_picasso">Picasso</string>
+    <string name="png">PNG</string>
+    <string name="jpeg">JPEG</string>
+
+    <!-- images urls -->
+
 </resources>
