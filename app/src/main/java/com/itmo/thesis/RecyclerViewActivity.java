@@ -14,7 +14,7 @@ import java.util.List;
 
 public class RecyclerViewActivity extends AppCompatActivity {
 
-    private List<Image> imageList;
+    private List<Image> imageList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +24,17 @@ public class RecyclerViewActivity extends AppCompatActivity {
         if (arguments != null) {
             Type library = (Type) arguments.get("lib");
             Format format = (Format) arguments.get("format");
-            imageList = new ArrayList<>();
-            imageList.add(new Image("https://raw.githubusercontent.com/SergeLys/findSq/master/images/end_game.jpg", getString(R.string.png),"600*800"));
+            if (format == Format.PNG) {
+                imageList.add(new Image(getString(R.string.png_614x386), getString(R.string.png),"614x386"));
+                imageList.add(new Image(getString(R.string.png_819x515), getString(R.string.png),"819x515"));
+                imageList.add(new Image(getString(R.string.png_1279x804), getString(R.string.png),"1279x804"));
+                imageList.add(new Image(getString(R.string.png_2560x1609), getString(R.string.png),"2560x1609"));
+            } else {
+                imageList.add(new Image(getString(R.string.jpeg_614x386), getString(R.string.jpeg),"614x386"));
+                imageList.add(new Image(getString(R.string.jpeg_819x515), getString(R.string.jpeg),"819x515"));
+                imageList.add(new Image(getString(R.string.jpeg_1279x804), getString(R.string.jpeg),"1279x804"));
+                imageList.add(new Image(getString(R.string.jpeg_2560x1609), getString(R.string.jpeg),"2560x1609"));
+            }
             RecyclerView recyclerView = findViewById(R.id.list);
             RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);

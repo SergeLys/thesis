@@ -4,12 +4,21 @@
     <string name="btn_clear">clear</string>
     <string name="picasso_label">Picasso</string>
     <string name="glide_label">Glide</string>
-    <string name="glide_btn">Glide</string>
-    <string name="btn_glide">Glide</string>
-    <string name="btn_picasso">Picasso</string>
     <string name="png">PNG</string>
     <string name="jpeg">JPEG</string>
 
     <!-- images urls -->
+
+    <!-- PNG -->
+    <string name="png_614x386">https://raw.githubusercontent.com/SergeLys/thesis/master/img/png/614-386.png?token=AFI2ZT3SMKS7UBT3YWGLJKC5VXLQY</string>
+    <string name="png_819x515">https://raw.githubusercontent.com/SergeLys/thesis/master/img/png/819-515.png?token=AFI2ZT4TGRWEE7FBD2AV7YS5VXLSS</string>
+    <string name="png_1279x804">https://raw.githubusercontent.com/SergeLys/thesis/master/img/png/1279-804.png?token=AFI2ZT36XZ3XYWDFGECOOQK5VXLVO</string>
+    <string name="png_2560x1609">https://raw.githubusercontent.com/SergeLys/thesis/master/img/png/2560-1609.png</string>
+
+    <!-- JPEG -->
+    <string name="jpeg_614x386">https://raw.githubusercontent.com/SergeLys/thesis/master/img/jpeg/614-386.jpg?token=AFI2ZTZRTU7CUA2Z6EERZZ25VXL2U</string>
+    <string name="jpeg_819x515">https://raw.githubusercontent.com/SergeLys/thesis/master/img/jpeg/819%20-515.jpg?token=AFI2ZTZNMPW2OQHCDVVOS5C5VXL4A</string>
+    <string name="jpeg_1279x804">https://raw.githubusercontent.com/SergeLys/thesis/master/img/jpeg/1279-804.jpg?token=AFI2ZT3SCLREHQMP6LYEEHS5VXL5A</string>
+    <string name="jpeg_2560x1609">https://raw.githubusercontent.com/SergeLys/thesis/master/img/jpeg/2560-1609.jpg?token=AFI2ZTZDACPX75XUMQFSZZS5VXL6C</string>
 
 </resources>

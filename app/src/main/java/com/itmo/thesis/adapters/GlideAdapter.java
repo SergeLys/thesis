@@ -1,6 +1,7 @@
 package com.itmo.thesis.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.TimingLogger;
 import android.view.LayoutInflater;
@@ -11,10 +12,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.itmo.thesis.Image;
 import com.itmo.thesis.R;
 
@@ -48,19 +54,30 @@ public class GlideAdapter extends RecyclerView.Adapter<GlideAdapter.ViewHolder>{
         holder.load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                long startTime = System.currentTimeMillis();
-                timing.addSplit("start load");
+                holder.speedView.setText("Loading");
+                final long startTime = System.currentTimeMillis();
+                timing.addSplit("start load " + image.getFormat());
                 Glide.with(view.getContext())
                         .load(Uri.parse(image.getUrl()))
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                long endTime = System.currentTimeMillis();
+                                holder.speedView.setText((endTime - startTime) + " ms");
+                                timing.addSplit("finish load");
+                                timing.dumpToLog();
+                                timing.reset();
+                                return false;
+                            }
+                        })
                         .into(holder.imageView);
-                timing.addSplit("finish load");
-                timing.dumpToLog();
-                timing.reset();
-                long stopTime = System.currentTimeMillis();
-                long elapsedTime = stopTime - startTime;
-                holder.speedView.setText(elapsedTime + " ms");
             }
         });
         holder.clear.setOnClickListener(new View.OnClickListener() {

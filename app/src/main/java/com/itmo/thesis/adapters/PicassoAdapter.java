@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -50,19 +51,28 @@ public class PicassoAdapter extends RecyclerView.Adapter<PicassoAdapter.ViewHold
         holder.load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                long startTime = System.currentTimeMillis();
-                timing.addSplit("start load");
+                holder.speedView.setText("Loading");
+                final long startTime = System.currentTimeMillis();
+                timing.addSplit("start load " + image.getFormat());
                 Picasso.get()
                         .load(Uri.parse(image.getUrl()))
                         .networkPolicy(NetworkPolicy.NO_CACHE)
                         .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
-                        .into(holder.imageView);
-                timing.addSplit("finish load");
-                timing.dumpToLog();
-                timing.reset();
-                long stopTime = System.currentTimeMillis();
-                long elapsedTime = stopTime - startTime;
-                holder.speedView.setText(elapsedTime + " ms");
+                        .into(holder.imageView, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                long endTime = System.currentTimeMillis();
+                                holder.speedView.setText((endTime - startTime) + " ms");
+                                timing.addSplit("finish load");
+                                timing.dumpToLog();
+                                timing.reset();
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+
+                            }
+                        });
             }
         });
         holder.clear.setOnClickListener(new View.OnClickListener() {
